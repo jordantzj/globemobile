@@ -3,6 +3,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import CountryContainer from '@/components/CountryContainer';
 
 export default function TabTwoScreen() {
   return (
@@ -17,7 +18,29 @@ export default function TabTwoScreen() {
         <ThemedText type="subtitle">Countries you've visited</ThemedText>
       </ThemedView>
       <ThemedView>
-        <ThemedText type='default'> Containers go here </ThemedText>
+        <ThemedText type="defaultSemiBold">Europe</ThemedText>
+        <CountryContainer countryName="France" continent="EU" />
+        <CountryContainer countryName="Germany" continent="EU" />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">Asia</ThemedText>
+        <CountryContainer countryName="China" continent="AS" />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">Africa</ThemedText>
+        <CountryContainer countryName="Egypt" continent="AF" />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">North America</ThemedText>
+        <CountryContainer countryName="Canda" continent="NA" />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">South America</ThemedText>
+        <CountryContainer countryName="Brazil" continent="SA" />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">Oceania</ThemedText>
+        <CountryContainer countryName="Australia" continent="OC" />
       </ThemedView>
     </ParallaxScrollView>
   );

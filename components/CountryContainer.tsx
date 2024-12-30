@@ -1,28 +1,53 @@
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 
-import { View, StyleSheet } from 'react-native';
+const CONTINENT_COLORS = {
+  AF: '#D73D3D',
+  NA: '#fcf75e',
+  SA: '#ff964f',
+  AS: '#147914',
+  EU: '#1417A9',
+  OC: '#b19cd9',
+} as const;
 
-export default function CountryContainer(style:any, children:any) {
+type Continent = keyof typeof CONTINENT_COLORS;
+
+type CountryContainerProps = {
+  countryName: string;
+  continent: Continent;
+}
+
+export default function CountryContainer({
+  countryName,
+  continent,
+}: CountryContainerProps) {
   return (
-    <View style={[styles.container, style]}>
-    <View style={styles.leftHalf}></View>
-    <View style={styles.rightHalf}></View>
-    {children}
-  </View>
+    <SafeAreaView>
+    <ThemedView style={styles.container}>
+      <ThemedText style={{ color: 'black' }} type='default'>{countryName}</ThemedText>
+    </ThemedView>
+    <ThemedView style={[styles.backgroundContainer, { backgroundColor: CONTINENT_COLORS[continent] }]}>
+    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flexDirection: 'row',
-      height: 200, // Adjust height as needed
-      width: '100%',
-    },
-    leftHalf: {
-      flex: 1,
-      backgroundColor: 'red',
-    },
-    rightHalf: {
-      flex: 1,
-      backgroundColor: 'gray',
-    },
-  });
+  container: {
+    flex: 1, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#C6C5C2',
+    zIndex: 1,
+    height: 30,
+    width: 300,
+    left: 10,
+    marginBottom: 5,
+  },
+  backgroundContainer: {
+    position: 'absolute',
+    width: 310,
+    height: 30,
+  },
+});
