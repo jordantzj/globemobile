@@ -10,7 +10,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Welcome to Globe Mobile!</ThemedText>
         <HelloWave />
       </ThemedView>
     </SafeAreaView>
