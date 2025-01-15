@@ -39,6 +39,8 @@ export default function TabTwoScreen() {
         <ThemedText type="subtitle">Countries you've visited</ThemedText>
       </ThemedView>
       <ThemedView>
+      </ThemedView>
+      <ThemedView>
         <ThemedText type="defaultSemiBold">Europe</ThemedText>
         {countries
         .filter((country) => country.continent === "Europe")
