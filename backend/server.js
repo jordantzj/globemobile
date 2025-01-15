@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 let db;
 client.connect()
   .then(() => {
-    db = client.db('globemobile'); // Replace with your database name
+    db = client.db('visitedCountries'); // Replace with your database name
     console.log('Connected to MongoDB successfully!');
   })
   .catch(err => {
@@ -39,21 +39,22 @@ app.get('/visitedCountries', async (req, res) => {
     const visitedCountries = await db.collection('visitedCountries').find().toArray();
     res.json(visitedCountries);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Failed to fetch users' });
+    console.error('Error fetching countries:', error);
+    res.status(500).json({ error: 'Failed to fetch countries' });
   }
 });
 
-app.post('/visitedCountries', async (req, res) => {
-  try {
-    const newCountry = req.body;
-    const result = await db.collection('visitedCountries').insertOne(newCountry);
-    res.json(result);
-  } catch (error) {
-    console.error('Error adding user:', error);
-    res.status(500).json({ error: 'Failed to add user' });
-  }
-});
+
+// app.post('/visitedCountries', async (req, res) => {
+//   try {
+//     const newCountry = req.body;
+//     const result = await db.collection('visitedCountries').insertOne(newCountry);
+//     res.json(result);
+//   } catch (error) {
+//     console.error('Error adding user:', error);
+//     res.status(500).json({ error: 'Failed to add user' });
+//   }
+// });
 
 // Start the Server
 app.listen(port, () => {

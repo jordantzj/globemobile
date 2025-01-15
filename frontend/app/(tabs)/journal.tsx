@@ -7,8 +7,13 @@ import countries from '@/app/country-by-continent.json';
 import { getVisitedCountries} from '@/app/api';
 import React, { useEffect, useState } from 'react';
 
+interface Country {
+  country: string;
+  continent: string;
+}
+
 export default function TabTwoScreen() {
-  const [visitedCountries, setVisitedCountries] = useState([]);
+  const [visitedCountries, setVisitedCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -19,7 +24,11 @@ export default function TabTwoScreen() {
   const fetchVisitedCountries = async () => {
     try {
       const data = await getVisitedCountries();
-      setVisitedCountries(data); // Set the fetched data
+      const countriesVisitedData = data[0].countriesVisited;
+      const filteredCountries = countries.filter(countryObj => 
+        countriesVisitedData.includes(countryObj.country)
+      );
+      setVisitedCountries(filteredCountries);
     } catch (error) {
       console.error('Error fetching countries:', error);
     } finally {
@@ -42,7 +51,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">Europe</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "Europe")
         .map((country) => (
           <CountryContainer
@@ -54,7 +63,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">Asia</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "Asia")
         .map((country) => (
           <CountryContainer
@@ -66,7 +75,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">Africa</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "Africa")
         .map((country) => (
           <CountryContainer
@@ -78,7 +87,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">North America</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "North America")
         .map((country) => (
           <CountryContainer
@@ -90,7 +99,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">South America</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "South America")
         .map((country) => (
           <CountryContainer
@@ -102,7 +111,7 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedView>
         <ThemedText type="defaultSemiBold">Oceania</ThemedText>
-        {countries
+        {visitedCountries
         .filter((country) => country.continent === "Oceania")
         .map((country) => (
           <CountryContainer
