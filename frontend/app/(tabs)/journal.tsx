@@ -6,15 +6,19 @@ import CountryContainer from '@/components/CountryContainer';
 import countries from '@/app/country-by-continent.json';
 import { getVisitedCountries} from '@/app/api';
 import React, { useEffect, useState } from 'react';
+import CountryPicker, { Country, CountryCode } from 'react-native-country-picker-modal';
 
-interface Country {
+interface visitedCountry {
   country: string;
   continent: string;
 }
 
 export default function TabTwoScreen() {
-  const [visitedCountries, setVisitedCountries] = useState<Country[]>([]);
+  const [visitedCountries, setVisitedCountries] = useState<visitedCountry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [country, setCountry] = useState<Country>()
+  const [countryCode, setCountryCode] = useState<CountryCode>('FR')
+
   
   useEffect(() => {
     // Fetch data when the component mounts
@@ -35,6 +39,10 @@ export default function TabTwoScreen() {
       setLoading(false); // Stop loading
     }
   };
+  const onSelect = (country: Country) => {
+    setCountryCode(country.cca2);
+    setCountry(country);
+  };
   
   return (
     <ParallaxScrollView
@@ -43,6 +51,17 @@ export default function TabTwoScreen() {
         <Image source={require('@/assets/images/mapwithpins.jpg')}/>
       }
     >
+    <CountryPicker
+      {...{
+        countryCode,
+        withFilter: true,
+        withFlag: true,
+        withCountryNameButton: true,
+        withAlphaFilter: true,
+        onSelect: onSelect,
+      }}
+      visible
+    />
       <ThemedView>
         <ThemedText type="title">Travel Journal</ThemedText>
         <ThemedText type="subtitle">Countries you've visited</ThemedText>
