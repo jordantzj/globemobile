@@ -3,9 +3,9 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config(); // For environment variables
 const db_password = process.env.MONGODB_PASSWORD; // Get the database password from environment variables
-
+const port = process.env.PORT
 const app = express();
-const port = 3000;
+
 
 // Middleware
 app.use(cors());
@@ -44,17 +44,24 @@ app.get('/visitedCountries', async (req, res) => {
   }
 });
 
+app.post('/addCountries', async (req, res) => {
+  try {
+    const { countries } = req.body; // Expecting a list of countries to add
+    const result = await db.collection('visitedCountries').updateOne(
+      {}, // Match any document (assuming there's only one document in the collection)
+      { $push: { countriesVisited: { $each: countries } } } // Add the new countries to the array
+    );
 
-// app.post('/visitedCountries', async (req, res) => {
-//   try {
-//     const newCountry = req.body;
-//     const result = await db.collection('visitedCountries').insertOne(newCountry);
-//     res.json(result);
-//   } catch (error) {
-//     console.error('Error adding user:', error);
-//     res.status(500).json({ error: 'Failed to add user' });
-//   }
-// });
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'No document found to update' });
+    }
+
+    res.json({ message: 'Countries added successfully', result });
+  } catch (error) {
+    console.error('Error adding countries:', error);
+    res.status(500).json({ error: 'Failed to add countries' });
+  }
+});
 
 // Start the Server
 app.listen(port, () => {

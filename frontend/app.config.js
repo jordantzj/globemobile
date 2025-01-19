@@ -6,7 +6,7 @@ export default {
     slug: 'globemobile',
     version: '1.0.0',
     extra: {
-      URL: process.env.URL,
+        URL: process.env.URL,
     },
   },
 };

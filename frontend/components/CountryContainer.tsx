@@ -23,13 +23,13 @@ export default function CountryContainer({
   continent,
 }: CountryContainerProps) {
   return (
-    <SafeAreaView>
-    <ThemedView style={styles.container}>
-      <ThemedText style={{ color: 'black' }} type='default'>{countryName}</ThemedText>
-    </ThemedView>
-    <ThemedView style={[styles.backgroundContainer, { backgroundColor: CONTINENT_COLORS[continent] }]}>
-    </ThemedView>
-    </SafeAreaView>
+    <View>
+      <ThemedView style={styles.container}>
+        <ThemedText style={{ color: 'black' }} type='default'>{countryName}</ThemedText>
+      </ThemedView>
+      <ThemedView style={[styles.backgroundContainer, { backgroundColor: CONTINENT_COLORS[continent] }]}>
+      </ThemedView>
+    </View>
   );
 }
 
