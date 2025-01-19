@@ -1,11 +1,12 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
 
-const API_URL = 'http://192.168.86.33:3000'; // Expo's IP address
+const URL = Constants.expoConfig?.extra?.URL;
 
 export const getVisitedCountries = async () => {
   try {
-    const response = await axios.get(`${API_URL}/visitedCountries`);
-    console.log('Visited countries blah:', response.data);
+    const response = await axios.get(`http:${URL}/visitedCountries`);
+    console.log('Visited countries:', response.data);
     return response.data;
   } catch (error: unknown) {
     console.error('Error fetching countries:', error);
