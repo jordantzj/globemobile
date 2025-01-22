@@ -2,7 +2,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 
 const URL = Constants.expoConfig?.extra?.URL;
-
+const documentId = Constants.expoConfig?.extra?.documentId;
 
 export const getVisitedCountries = async () => {
   try {
@@ -25,10 +25,12 @@ export const getVisitedCountries = async () => {
   
 };
 
-export const addVisitedCountries = async (value: any) => {
+export const addVisitedCountries = async (countries: string[]) => {
   try {
-    console.log('Adding countries to:', `http://${URL}/addCountries`, 'with value:', value);
-    const response = await axios.post(`http://${URL}/addCountries`, value);
+    console.log('Adding countries to:', `http://${URL}/addCountries`, 'with value:', countries);
+    const response = await axios.post(`http://${URL}/addCountries`, {
+      id: documentId,
+      countries: countries,});
     return response.data;
   } catch (error) {
     console.error('Error adding countries:', error);

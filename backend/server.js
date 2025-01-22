@@ -1,11 +1,10 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb'); // Import ObjectId
 const cors = require('cors');
 require('dotenv').config(); // For environment variables
 const db_password = process.env.MONGODB_PASSWORD; // Get the database password from environment variables
-const port = process.env.PORT
+const port = process.env.PORT || 3000; // Default to 3000 if PORT is not set
 const app = express();
-
 
 // Middleware
 app.use(cors());
@@ -25,7 +24,7 @@ const client = new MongoClient(uri, {
 let db;
 client.connect()
   .then(() => {
-    db = client.db('visitedCountries'); // Replace with your database name
+    db = client.db('visitedCountries');
     console.log('Connected to MongoDB successfully!');
   })
   .catch(err => {
@@ -46,14 +45,23 @@ app.get('/visitedCountries', async (req, res) => {
 
 app.post('/addCountries', async (req, res) => {
   try {
-    const { countries } = req.body; // Expecting a list of countries to add
+    const { countries, id } = req.body; // Expecting a list of countries to add and an `id` field for the document to update
+    
+    // Check if ID is provided
+    if (!id) {
+      return res.status(400).json({ error: 'Document ID is required' });
+    }
+
+    // Convert the string id to ObjectId
+    const objectId = new ObjectId(id);
+
     const result = await db.collection('visitedCountries').updateOne(
-      {}, // Match any document (assuming there's only one document in the collection)
+      { _id: objectId }, // Use the ObjectId to match the document
       { $push: { countriesVisited: { $each: countries } } } // Add the new countries to the array
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: 'No document found to update' });
+      return res.status(404).json({ error: 'No document found with the specified ID' });
     }
 
     res.json({ message: 'Countries added successfully', result });

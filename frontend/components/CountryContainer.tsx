@@ -1,4 +1,4 @@
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
@@ -22,13 +22,20 @@ export default function CountryContainer({
   countryName,
   continent,
 }: CountryContainerProps) {
+  const screenWidth = Dimensions.get('window').width; // Get device screen width
+  const containerWidth = screenWidth * 0.8; // Set width relative to screen width
+  
   return (
     <View>
-      <ThemedView style={styles.container}>
+      <ThemedView style={[styles.container, { width: containerWidth }]}>
         <ThemedText style={{ color: 'black' }} type='default'>{countryName}</ThemedText>
       </ThemedView>
-      <ThemedView style={[styles.backgroundContainer, { backgroundColor: CONTINENT_COLORS[continent] }]}>
-      </ThemedView>
+      <ThemedView
+        style={[
+          styles.backgroundContainer,
+          { width: containerWidth, backgroundColor: CONTINENT_COLORS[continent] }
+        ]}
+      />
     </View>
   );
 }
@@ -41,13 +48,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     zIndex: 1,
     height: 30,
-    width: 300,
-    left: 10,
     marginBottom: 5,
+    left: 10
   },
   backgroundContainer: {
     position: 'absolute',
-    width: 310,
     height: 30,
   },
 });

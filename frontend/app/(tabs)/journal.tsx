@@ -2,6 +2,8 @@ import {
   StyleSheet,
   Image,
   Button,
+  Text,
+  TouchableOpacity,
 } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
@@ -11,6 +13,8 @@ import countries from "@/app/country-by-continent.json";
 import { getVisitedCountries, addVisitedCountries } from "@/app/api";
 import React, { useEffect, useState } from "react";
 import DropDownPicker from 'react-native-dropdown-picker';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+
 
 interface visitedCountry {
   country: string;
@@ -22,7 +26,7 @@ export default function TabTwoScreen() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<any>(false);
   const [value, setValue] = useState<any>([]);
-  const [items, setItems] = useState<any>(countries);
+  const [listItems, setListItems] = useState<any>(countries);
 
   useEffect(() => {
     // Fetch data when the component mounts
@@ -36,6 +40,9 @@ export default function TabTwoScreen() {
       const filteredCountries = countries.filter((countryObj) =>
         countriesVisitedData.includes(countryObj.country)
       );
+      setListItems(countries.filter(
+        (country) => !filteredCountries.includes(country)
+      ));
       setVisitedCountries(filteredCountries);
     } catch (error) {
       console.error("Error fetching countries:", error);
@@ -44,6 +51,15 @@ export default function TabTwoScreen() {
     }
   };
 
+  const handleSubmit = async (value: string[]) => {
+    try {
+      await addVisitedCountries(value); // Add the selected countries
+      fetchVisitedCountries(); // Re-fetch the visited countries after adding
+      setValue([]); // Reset the selected countries
+    } catch (error) {
+      console.error("Error adding countries:", error);
+    }
+  };
 
   return (
     <ParallaxScrollView
@@ -57,21 +73,19 @@ export default function TabTwoScreen() {
         <ThemedText type="subtitle">Countries you've visited</ThemedText>
       </ThemedView>
 
-      <ThemedView>
+      <ThemedView style={styles.dropdownContainer}>
         <DropDownPicker
           open={open}
           value={value}
-          items={items}
+          items={listItems}
           setOpen={setOpen}
           setValue={setValue}
-          setItems={setItems}
+          setItems={setListItems}
           multiple={true}
-          min={0}
-          max={5}
           searchable={true}
           listMode="SCROLLVIEW" //To fix the "VirtualizedLists should never be nested inside plain ScrollViews" warning
           searchPlaceholder="Search For Countries..."
-          placeholder="Select Countries You've visited"
+          placeholder="Select Visited Countries"
           placeholderStyle={{
             color: "rgba(128, 128, 128, 0.6)"
           }}
@@ -80,7 +94,9 @@ export default function TabTwoScreen() {
             value: 'country'
           }}
         />
-        <Button title="Submit" onPress={() => addVisitedCountries(value)} />
+        <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmit(value)}>
+          <IconSymbol name="airplane.circle.fill" size={38} color="black" />
+        </TouchableOpacity>
       </ThemedView>
 
 
@@ -164,5 +180,20 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     gap: 8,
+  },
+  dropdownContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // Ensure the dropdown and button are spaced nicely
+    gap: 10, // Optional: Add some space between the dropdown and button
+    width: '75%',
+  },
+  submitButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#d3d3d3',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
   },
 });

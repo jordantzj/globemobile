@@ -7,6 +7,7 @@ export default {
     version: '1.0.0',
     extra: {
         URL: process.env.URL,
+        documentId: process.env.DOCUMENT_ID,
     },
   },
 };
